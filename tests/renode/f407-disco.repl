@@ -1,0 +1,15 @@
+using "platforms/boards/stm32f4_discovery-kit.repl"
+
+// The stock model assumes a 72 MHz SysTick; the firmware runs from the 16 MHz HSI.
+nvic:
+    systickFrequency: 16000000
+
+// The stock board only wires the green LED (PD12, "UserLED"); add the other three.
+OrangeLED: Miscellaneous.LED @ gpioPortD 13
+RedLED: Miscellaneous.LED @ gpioPortD 14
+BlueLED: Miscellaneous.LED @ gpioPortD 15
+
+gpioPortD:
+    13 -> OrangeLED@0
+    14 -> RedLED@0
+    15 -> BlueLED@0

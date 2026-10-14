@@ -1,0 +1,45 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "f407",
+      "displayName": "STM32F407 firmware",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/f407",
+      "toolchainFile": "${sourceDir}/cmake/arm-none-eabi.cmake",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      }
+    },
+    {
+      "name": "host",
+      "displayName": "Host unit tests",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/host",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "f407",
+      "configurePreset": "f407"
+    },
+    {
+      "name": "host",
+      "configurePreset": "host"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "host",
+      "configurePreset": "host",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ]
+}

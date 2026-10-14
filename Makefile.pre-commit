@@ -1,0 +1,45 @@
+# pre-commit (.pre-commit-config.yaml), run inside the dev container like everything else.
+# Included by Makefile.
+
+# Branch changes are checked against this ref: PR_BASE..HEAD.
+PR_BASE ?= origin/master
+
+CONTAINER_TARGETS += pre-commit-run pre-commit-pr-run
+
+ifneq ($(IN_CONTAINER),1)
+
+.PHONY: hooks
+
+# Installs git hooks that re-enter the container: staged changes on commit,
+# the whole branch (pre-commit-pr-run) on push.
+hooks:
+	@hooks=$$(git rev-parse --git-path hooks) && mkdir -p "$$hooks" && \
+	for hook in pre-commit:pre-commit-run pre-push:pre-commit-pr-run; do \
+	    printf '#!/bin/sh\nexec make -C "$$(git rev-parse --show-toplevel)" %s\n' "$${hook#*:}" \
+	        > "$$hooks/$${hook%%:*}"; \
+	    chmod +x "$$hooks/$${hook%%:*}"; \
+	    echo "installed $$hooks/$${hook%%:*} -> make $${hook#*:}"; \
+	done
+
+else
+
+# Hooks for the staged changes, as on commit.
+pre-commit-run:
+	pre-commit run
+
+# Hooks for every file changed on this branch (merge-base of PR_BASE and HEAD to HEAD),
+# then the manual-stage hooks (e.g. gitleaks over the full history). Without PR_BASE
+# (first push to an empty remote, or not fetched) there is no base, so check all files.
+pre-commit-pr-run:
+	@if git rev-parse --verify --quiet '$(PR_BASE)^{commit}' >/dev/null; then \
+	    range="--from-ref $(PR_BASE) --to-ref HEAD"; \
+	else \
+	    echo "note: PR_BASE '$(PR_BASE)' not found; checking all files"; \
+	    range="--all-files"; \
+	fi; \
+	status=0; \
+	pre-commit run $$range || status=1; \
+	pre-commit run --hook-stage manual $$range || status=1; \
+	exit $$status
+
+endif

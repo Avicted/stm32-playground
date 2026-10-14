@@ -1,0 +1,24 @@
+{
+	"name": "stm32-playground",
+	"build": {
+		"dockerfile": "../docker/Dockerfile",
+		"context": "../docker"
+	},
+	// Same path as on the host, so build/ and compile_commands.json work in both places.
+	"workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind",
+	"workspaceFolder": "${localWorkspaceFolder}",
+	"remoteUser": "developer",
+	// Shared with `make` on the host: Renode and pre-commit caches persist across rebuilds.
+	"containerEnv": {
+		"HOME": "${localWorkspaceFolder}/.cache/home"
+	},
+	"postCreateCommand": "git submodule update --init --depth 1 && make compile-db",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"llvm-vs-code-extensions.vscode-clangd",
+				"ms-azuretools.vscode-docker"
+			]
+		}
+	}
+}

@@ -1,0 +1,17 @@
+:name: STM32F407 Discovery
+:description: Loads the stm32-playground firmware. Does not start emulation.
+
+# Paths are relative to the repo root; override them when running from elsewhere.
+using sysbus
+$repl?=@tests/renode/f407-disco.repl
+$elf?=@build/f407/firmware/firmware.elf
+
+mach create "f407"
+machine LoadPlatformDescription $repl
+
+macro reset
+"""
+    sysbus LoadELF $elf
+    cpu VectorTableOffset 0x08000000
+"""
+runMacro $reset

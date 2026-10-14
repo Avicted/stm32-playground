@@ -1,0 +1,16 @@
+[submodule "third_party/CMSIS_5"]
+	path = third_party/CMSIS_5
+	url = https://github.com/ARM-software/CMSIS_5
+	shallow = true
+[submodule "third_party/cmsis_device_f4"]
+	path = third_party/cmsis_device_f4
+	url = https://github.com/STMicroelectronics/cmsis_device_f4
+	shallow = true
+[submodule "third_party/Unity"]
+	path = third_party/Unity
+	url = https://github.com/ThrowTheSwitch/Unity
+	shallow = true
+[submodule "third_party/FreeRTOS-Kernel"]
+	path = third_party/FreeRTOS-Kernel
+	url = https://github.com/FreeRTOS/FreeRTOS-Kernel
+	shallow = true

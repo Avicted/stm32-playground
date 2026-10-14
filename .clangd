@@ -1,0 +1,5 @@
+# Umbrella headers that must be included even though no symbol comes from them directly:
+# FreeRTOS.h has to precede task.h/semphr.h, and stm32f4xx.h selects the device header.
+Diagnostics:
+  Includes:
+    IgnoreHeader: [FreeRTOS\.h, stm32f4xx\.h]

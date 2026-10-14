@@ -1,0 +1,21 @@
+{
+	// C/C++ language support comes from clangd, with flags from ./compile_commands.json.
+	// It needs the ARM toolchain's headers, so use the dev container (Reopen in Container).
+	"clangd.path": "/usr/local/bin/clangd",
+	"clangd.arguments": [
+		"--query-driver=/usr/bin/arm-none-eabi-gcc,/usr/bin/cc",
+		"--header-insertion=never"
+	],
+	// Microsoft's C/C++ extension would report its own, conflicting errors.
+	"C_Cpp.intelliSenseEngine": "disabled",
+	// Builds go through the Makefile and CMake presets, not CMake Tools.
+	"cmake.configureOnOpen": false,
+	"cmake.automaticReconfigure": false,
+	"files.associations": {
+		"Makefile.*": "makefile"
+	},
+	"search.exclude": {
+		"third_party/**": true,
+		".cache/**": true
+	}
+}
